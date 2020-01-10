@@ -40,8 +40,14 @@ class Hen extends animals
     }
 }
 
-class Granary
+class Farm
 {//Помещаем животных в амбар
+
+    public $countLitersMilk = 0;
+    public $countAgg = 0;
+    public $animals = [];
+    public $countProduct = [];
+
 
     public function createCow()
     {
@@ -53,36 +59,52 @@ class Granary
         return new Hen();
     }
 
-}
-
-
-$granary = new Granary();
-$animals = [];//Создоние общего массива с животными
-
-for ($i = 0; $i <= 10; $i++) {//заполняем массив коровами
-    $animals[] = $granary->createCow();
-}
-
-for ($i = 0; $i <= 20; $i++) {//заполняем массив курицами
-    $animals[] = $granary->createHen();
-}
-
-$countLitersMilk = 0;
-$countAgg = 0;
-
-foreach ($animals as $animal) {//перебор по массива
-    switch ($animal->getNameClass()) {
-        case "Cow"://Если имя класса "Cow" то определяем, что это корова
-            $countLitersMilk += $animal->getProducts();
-            break;
-        case "Hen"://Если имя класса "Hen" то определяем, что это курица
-            $countAgg += $animal->getProducts();
-            break;
+    public function generateNewCow($numberCow)
+    {
+        for ($i = 1; $i <= $numberCow; $i++) {
+            $this->animals[] = $this->createCow();
+        }
+        return $this->animals;
     }
 
+    public function generateNewHen($numberHen)
+    {
+        for ($i = 1; $i <= $numberHen; $i++) {
+            $this->animals[] = $this->createHen();
+        }
+        return $this->animals;
+    }
+
+    public function sortProduct()
+    {
+        foreach ($this->animals as $animal) {//перебор по массиву
+            switch ($animal->getNameClass()) {
+                case "Cow"://Если имя класса "Cow" то определяем, что это корова
+                    $this->countLitersMilk += $animal->getProducts();
+                    break;
+                case "Hen"://Если имя класса "Hen" то определяем, что это курица
+                    $this->countAgg += $animal->getProducts();
+                    break;
+            }
+        }
+        $this->countProduct[] += $this->countLitersMilk;
+        $this->countProduct[] += $this->countAgg;
+        return $this->countProduct;
+
+    }
 }
-echo "Молоко - ".$countLitersMilk." л"."\n";
-echo "Яйца - ".$countAgg." шт"."\n";
+
+$animal = new Farm();
+
+$Hen = $animal->generateNewHen(20);
+$Cow = $animal->generateNewCow(10);
+
+$product = $animal->sortProduct();
+
+echo "Молоко - ".$product[0]." л"."\n";
+echo "Яйца - ".$product[1]." шт"."\n";
+
+
 
 
 
