@@ -3,11 +3,6 @@
 abstract class animals
 {//Абстрактный класс для наследования
     public abstract function getProducts();
-
-    public function getNameClass()
-    {
-        return static::class;
-    }
 }
 
 class Cow extends animals
@@ -48,29 +43,10 @@ class Farm
     public $animals = [];
     public $countProduct = [];
 
-
-    public function createCow()
+    public function generateNewAnimals($numberAnimals, $animal)
     {
-        return new Cow();
-    }
-
-    public function createHen()
-    {
-        return new Hen();
-    }
-
-    public function generateNewCow($numberCow)
-    {
-        for ($i = 1; $i <= $numberCow; $i++) {
-            $this->animals[] = $this->createCow();
-        }
-        return $this->animals;
-    }
-
-    public function generateNewHen($numberHen)
-    {
-        for ($i = 1; $i <= $numberHen; $i++) {
-            $this->animals[] = $this->createHen();
+        for ($i = 1; $i <= $numberAnimals; $i++) {
+            $this->animals[] = $animal;
         }
         return $this->animals;
     }
@@ -78,7 +54,7 @@ class Farm
     public function sortProduct()
     {
         foreach ($this->animals as $animal) {//перебор по массиву
-            switch ($animal->getNameClass()) {
+            switch (get_class($animal)) {
                 case "Cow"://Если имя класса "Cow" то определяем, что это корова
                     $this->countLitersMilk += $animal->getProducts();
                     break;
@@ -96,8 +72,11 @@ class Farm
 
 $animal = new Farm();
 
-$Hen = $animal->generateNewHen(20);
-$Cow = $animal->generateNewCow(10);
+$hen = new Hen();
+$cow = new Cow();
+
+$Hen = $animal->generateNewAnimals(20, $hen);
+$Cow = $animal->generateNewAnimals(10, $cow);
 
 $product = $animal->sortProduct();
 
